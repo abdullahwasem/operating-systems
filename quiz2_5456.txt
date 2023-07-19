@@ -1,0 +1,91 @@
+#include<stdio.h>
+#include<unistd.h>
+#include<stdlib.h>
+#include<sys/time.h>
+#include<sys/stat.h>
+#include<sys/types.h>
+#include<fcntl.h>
+#include<sys/wait.h>
+#include<string.h>
+#include<semaphores>
+#include<threads>
+sem_t semA , semB , semC;
+semA = 1;
+semB = 0;
+semC = 0;
+countA = 0;
+countB = 0;
+countC = 0;
+void* threadA()
+{
+countA++ ;//detecting sequence 
+if ( countA==1)
+{
+wait(semA);
+	printF("a");
+sem_pos(semB);
+}
+}
+else
+{ wait(semA);
+printf("a") ;
+if (semA!=0)
+{ wait(semA);
+printf("a") ;
+sem_pos(semB);
+}
+}
+
+void* threadB()
+{
+countB++ ;
+if(countB==1)
+{
+wait(semB);
+	printF("b");
+sem_pos(semC);
+sem_pos(semC);
+}
+}
+else
+{
+print("b")
+sem_pos(semA);
+sem_pos(semA);
+}
+
+void* threadC()
+{
+wait(semC);
+	printF("c");
+if( semC!=0)
+{wait(semC);
+printf("c");
+}
+
+else
+{
+sem_pos(semB);
+}
+
+
+}
+
+int main(int* argc , char* argv[])
+{
+    pthread threadbazi[3] ;
+// array of three threads formed
+while(1)
+{
+	pthread_create(threadbazi[0] , NULL , threadA , NULL);
+	pthread_create(threadbazi[1] , NULL , threadB , NULL);
+	pthread_create(threadbazi[2] , NULL , threadC , NULL);
+}
+// joining the threads outside loop in order to use semaphores to sync
+pthread_join(threadbazi[0],NULL);
+pthread_join(threadbazi[1],NULL);
+pthread_join(threadbazi[2],NULL);	
+
+
+
+}
